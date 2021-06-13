@@ -1,26 +1,21 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import User from 'App/Models/User'
-import City from 'App/Models/City'
 import StoreValidator from 'App/Validators/User/StoreValidator'
-import Constants from 'App/Helpers/constants'
+import UpdateValidator from 'App/Validators/User/UpdateValidator'
 
 export default class UsersController {
   public async index({ request, response }: HttpContextContract) {
     try {
       const { name } = request.only(['name'])
-      const page = request.input('page', 1)
 
-      const data = await User.query()
-        .where(query => {
-          if (name) {
-            query.where('name', 'like', `%${name}%`)
-          }
-        })
-        .paginate(page, Constants.DEFAULT_PER_PAGE)
+      const data = await User.query().where(query => {
+        if (name) {
+          query.where('name', 'like', `%${name}%`)
+        }
+      })
 
-      return response.ok(data)
+      return response.ok({ data })
     } catch (error) {
-      console.log(error)
       return response.badRequest()
     }
   }
@@ -37,18 +32,51 @@ export default class UsersController {
         'living_city_id'
       ])
 
-      const user = await User.create(payload)
-      const city = await City.findOrFail(payload.living_city_id)
-
-      await user.related('livingCity').associate(city)
+      await User.create(payload)
 
       return response.created()
     } catch (e) {
-      return response.badRequest(e)
+      return response.badRequest()
     }
   }
 
-  public async update({}: HttpContextContract) {}
+  public async update({ request, response }: HttpContextContract) {
+    await request.validate(UpdateValidator)
 
-  public async destroy({}: HttpContextContract) {}
+    const id = request.param('id')
+    if (!id) {
+      return response.badRequest()
+    }
+
+    const { name } = request.only(['name'])
+
+    const user = await User.findOrFail(id)
+    user.name = name
+
+    try {
+      await user.save()
+    } catch (e) {
+      return response.internalServerError()
+    }
+
+    return response.ok(user)
+  }
+
+  public async destroy({ request, response }: HttpContextContract) {
+    const id = request.param('id')
+
+    if (!id) {
+      return response.badRequest()
+    }
+
+    const user = await User.findOrFail(id)
+
+    try {
+      await user.delete()
+
+      return response.noContent()
+    } catch (e) {
+      return response.internalServerError()
+    }
+  }
 }

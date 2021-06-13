@@ -17,13 +17,20 @@ import Logger from '@ioc:Adonis/Core/Logger'
 import HttpExceptionHandler from '@ioc:Adonis/Core/HttpExceptionHandler'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
+const mapErrToCode = {
+  E_VALIDATION_FAILURE: 422,
+  E_ROUTE_NOT_FOUND: 404,
+  E_ROW_NOT_FOUND: 404
+}
+
 export default class ExceptionHandler extends HttpExceptionHandler {
   public async handle(error: any, ctx: HttpContextContract) {
     /**
      * Self handle the validation exception
      */
-    if (error.code === 'E_VALIDATION_FAILURE') {
-      return ctx.response.status(422).send(error.messages)
+    const status = mapErrToCode[error.code]
+    if (status) {
+      return ctx.response.status(status).send(error.messages)
     }
 
     /**

@@ -1,8 +1,7 @@
 import { schema, rules } from '@ioc:Adonis/Core/Validator'
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import Constants from 'App/Helpers/constants'
 
-export default class StoreValidator {
+export default class UpdateValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   /*
@@ -25,23 +24,7 @@ export default class StoreValidator {
    *    ```
    */
   public schema = schema.create({
-    name: schema.string({}, [
-      rules.alpha({
-        allow: ['space']
-      }),
-      rules.required()
-    ]),
-    gender: schema.enum.optional([
-      Constants.GENDER_FEMALE,
-      Constants.GENDER_MALE,
-      Constants.GENDER_OTHER
-    ]),
-    genderSpecification: schema.string.optional({}, [
-      rules.alpha({ allow: ['space'] }),
-      rules.requiredWhen('gender', '=', Constants.GENDER_OTHER)
-    ]),
-    birthDate: schema.date({}),
-    living_city_id: schema.number([rules.exists({ table: 'cities', column: 'id' })])
+    name: schema.string({}, [rules.alpha({ allow: ['space'] })])
   })
 
   /**
@@ -56,8 +39,6 @@ export default class StoreValidator {
    *
    */
   public messages = {
-    'gender.enum':
-      'Use one of the following values: ["GENDER_FEMALE", "GENDER_MALE", "GENDER_OTHER"]',
-    'genderSpecification.requiredWhen': 'Required when passing property `gender` === "GENDER_OTHER"'
+    'name.required': 'Name is required.'
   }
 }

@@ -40,6 +40,13 @@ export default class UsersController {
     }
   }
 
+  public async show({ request, response }: HttpContextContract) {
+    const id = request.param('id')
+    const user = await User.findOrFail(id)
+
+    return response.ok(user)
+  }
+
   public async update({ request, response }: HttpContextContract) {
     await request.validate(UpdateValidator)
 

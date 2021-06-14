@@ -45,11 +45,16 @@ Creates `tmp` directory and migrates database. You should always migrate before 
 
 This step will create sqlite database under ./tmp directory
 
+### Remake db
+
+`npm run remakedb`
+This step will remove all ./tmp contents and run migration and seeds, in this order
+
 ### Run dev server
 
 `npm run server`
 
-This will run dev server on host localhost:3333
+Finally, this will run dev server on localhost:3333
 
 ### API docs
 

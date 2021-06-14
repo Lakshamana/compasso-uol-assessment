@@ -32,6 +32,10 @@ export default class UsersController {
         'living_city_id'
       ])
 
+      if (!payload.gender) {
+        delete payload.genderSpecification
+      }
+
       await User.create(payload)
 
       return response.created()

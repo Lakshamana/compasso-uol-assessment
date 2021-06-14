@@ -1,4 +1,5 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import StoreValidator from 'App/Validators/City/StoreValidator'
 import City from 'App/Models/City'
 
 export default class CitiesController {
@@ -23,9 +24,10 @@ export default class CitiesController {
   }
 
   public async store({ request, response }: HttpContextContract) {
+    await request.validate(StoreValidator)
     try {
-      const { name, state } = request.only(['name', 'state'])
-      await City.create({ name, state })
+      const payload = request.only(['name', 'state'])
+      await City.create(payload)
 
       return response.created()
     } catch (error) {

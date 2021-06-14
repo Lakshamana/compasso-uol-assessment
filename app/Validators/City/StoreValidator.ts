@@ -26,7 +26,7 @@ export default class StoreValidator {
    */
   public schema = schema.create({
     name: schema.string({}, [rules.alpha({ allow: ['space'] })]),
-    state: schema.enumSet(Constants.availableStates)
+    state: schema.enum(Constants.availableStates)
   })
 
   /**
@@ -41,7 +41,7 @@ export default class StoreValidator {
    *
    */
   public messages = {
-    state:
+    'state.enum':
       'Must be one of available EUA states. See README.md (Available states section) for details.'
   }
 }

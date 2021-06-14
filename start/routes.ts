@@ -19,6 +19,11 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import Constants from 'App/Helpers/constants'
 
 Route.resource('/users', 'UsersController').apiOnly()
 Route.resource('/cities', 'CitiesController').apiOnly()
+Route.get('/available-states', ({ response }: HttpContextContract) => {
+  return response.ok({ states: Constants.availableStates })
+})

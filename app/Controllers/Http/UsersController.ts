@@ -16,7 +16,7 @@ export default class UsersController {
 
       return response.ok({ data })
     } catch (error) {
-      return response.badRequest()
+      return response.internalServerError()
     }
   }
 
@@ -36,7 +36,7 @@ export default class UsersController {
 
       return response.created()
     } catch (e) {
-      return response.badRequest()
+      return response.internalServerError()
     }
   }
 
@@ -44,10 +44,6 @@ export default class UsersController {
     await request.validate(UpdateValidator)
 
     const id = request.param('id')
-    if (!id) {
-      return response.badRequest()
-    }
-
     const { name } = request.only(['name'])
 
     const user = await User.findOrFail(id)
@@ -64,10 +60,6 @@ export default class UsersController {
 
   public async destroy({ request, response }: HttpContextContract) {
     const id = request.param('id')
-
-    if (!id) {
-      return response.badRequest()
-    }
 
     const user = await User.findOrFail(id)
 

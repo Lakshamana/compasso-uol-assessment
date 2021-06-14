@@ -5,7 +5,7 @@ export default class CitySeeder extends BaseSeeder {
   public static developmentOnly = true
 
   public async run() {
-    City.createMany([
+    await City.createMany([
       {
         name: 'New York City',
         state: 'NY'

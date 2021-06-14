@@ -21,4 +21,4 @@
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.resource('/users', 'UsersController').apiOnly()
-Route.resource('/cities', 'CityController').apiOnly()
+Route.resource('/cities', 'CitiesController').apiOnly()

@@ -1,13 +1,35 @@
 import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import City from 'App/Models/City'
 
 export default class CitiesController {
-  public async index({}: HttpContextContract) {}
+  public async index({ request, response }: HttpContextContract) {
+    const { name, state } = request.only(['name', 'state'])
 
-  public async store({}: HttpContextContract) {}
+    try {
+      const data = await City.query().where(builder => {
+        if (name) {
+          builder.where('name', 'like', `%${name}%`)
+        }
 
-  public async show({}: HttpContextContract) {}
+        if (state) {
+          builder.where('state', 'like', `%${state}%`)
+        }
+      })
 
-  public async update({}: HttpContextContract) {}
+      return response.ok({ data })
+    } catch (error) {
+      return response.internalServerError()
+    }
+  }
 
-  public async destroy({}: HttpContextContract) {}
+  public async store({ request, response }: HttpContextContract) {
+    try {
+      const { name, state } = request.only(['name', 'state'])
+      await City.create({ name, state })
+
+      return response.created()
+    } catch (error) {
+      return response.internalServerError()
+    }
+  }
 }

@@ -16,20 +16,8 @@ export default class IndexSeeder extends BaseSeeder {
     await new seeder.default(this.client).run()
   }
 
-  private randomZeroOrOne() {
-    return +(Math.random() < 0.5)
-  }
-
   public async run() {
-    await this.runSeeder(await import('../User'))
     await this.runSeeder(await import('../City'))
-
-    const users = await User.all()
-    const cities = await City.all()
-
-    for (const user of users) {
-      const useCityIdx = this.randomZeroOrOne()
-      await user.related('livingCity').associate(cities[useCityIdx])
-    }
+    await this.runSeeder(await import('../User'))
   }
 }

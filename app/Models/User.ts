@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, belongsTo, BelongsTo, computed } from '@ioc:Adonis/Lucid/Orm'
 import City from 'App/Models/City'
 
 export default class User extends BaseModel {
@@ -15,7 +15,7 @@ export default class User extends BaseModel {
   @column()
   public genderSpecification: string
 
-  @column()
+  @column.date()
   public birthDate: DateTime
 
   @column.dateTime({ autoCreate: true })
@@ -32,4 +32,15 @@ export default class User extends BaseModel {
     foreignKey: 'livingCityId'
   })
   public livingCity: BelongsTo<typeof City>
+
+  @computed()
+  public get age(): number {
+    const now = DateTime.now()
+    let age = now.year - this.birthDate.year
+    if (now.ordinal < this.birthDate.ordinal) {
+      age--
+    }
+
+    return age
+  }
 }

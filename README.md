@@ -11,7 +11,7 @@ you system
   [asdf](https://github.com/asdf-vm/asdf) and [asdf-nodejs plugin](https://github.com/asdf-vm/asdf-nodejs)
   for managing node versions to run this project.
 
-There's a .nvmrc file in the project root directory. That should set properly set node version.
+There's a .nvmrc file in the project root directory. That should properly set node version.
 Ensure that node version is LTS (or above) by running
 
 ```
@@ -45,21 +45,24 @@ Creates `tmp` directory and migrates database. You should always migrate before 
 
 This step will create sqlite database under ./tmp directory
 
-### Remake db
-
-`npm run remakedb`
-This step will remove all ./tmp contents and run migration and seeds, in this order
-
 ### Run dev server
 
 `npm run server`
 
 Finally, this will run dev server on localhost:3333
 
+### Remake db
+
+`npm run remakedb`
+
+If you wish to remake db you can run this command,
+it will remove all ./tmp contents and run migration and seeds, in this order
+
 ### API docs
 
-Please, notice ther's not a field called `age` in users migration. It is because if you
-have a birth date you don't need (nor want to) to store a field. It can be just calculated.
+Please, notice there's not a field called `age` in users migration. It is because if you
+have a birth date you don't need to store a field (nor want to). The
+`GET /users/*` routes should return you a calculated `age` field, instead.
 
 Normally, I'd write decent API docs with swagger and stuff, but for the sake of KISS
 let me write it down here (listing request formats only):

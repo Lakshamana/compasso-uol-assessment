@@ -15,7 +15,9 @@ export default class User extends BaseModel {
   @column()
   public genderSpecification: string
 
-  @column.date()
+  @column.date({
+    serialize: (value: DateTime | null) => (value ? value.toFormat('dd/MM/yyyy') : value)
+  })
   public birthDate: DateTime
 
   @column.dateTime({ autoCreate: true })

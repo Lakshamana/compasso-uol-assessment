@@ -11,7 +11,7 @@ export default class Users extends BaseSchema {
       table.string('gender_specification')
       table.date('birth_date').notNullable()
 
-      table.integer('living_city_id').notNullable().references('id').inTable('cities')
+      table.integer('living_city_id').unsigned().notNullable().references('id').inTable('cities')
 
       /**
        * Uses timestampz for PostgreSQL and DATETIME2 for MSSQL

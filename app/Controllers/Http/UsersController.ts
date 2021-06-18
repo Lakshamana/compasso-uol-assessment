@@ -8,11 +8,13 @@ export default class UsersController {
     try {
       const { name } = request.only(['name'])
 
-      const data = await User.query().where(query => {
-        if (name) {
-          query.where('name', 'like', `%${name}%`)
-        }
-      })
+      const data = await User.query()
+        .where(query => {
+          if (name) {
+            query.where('name', 'like', `%${name}%`)
+          }
+        })
+        .withScopes(scopes => scopes.withCity())
 
       return response.ok({ data })
     } catch (error) {

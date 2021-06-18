@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, BelongsTo, computed } from '@ioc:Adonis/Lucid/Orm'
+import { BaseModel, column, belongsTo, BelongsTo, computed, scope } from '@ioc:Adonis/Lucid/Orm'
 import City from 'App/Models/City'
 
 export default class User extends BaseModel {
@@ -45,4 +45,8 @@ export default class User extends BaseModel {
 
     return age
   }
+
+  public static withCity = scope(query => {
+    return query.preload('livingCity', (city: City) => city.select('id', 'name', 'state'))
+  })
 }
